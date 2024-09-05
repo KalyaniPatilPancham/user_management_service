@@ -5,8 +5,8 @@ A simple microservice implemented in Go that provides an HTTP API for managing u
 ## Features
 
 - Add a new user
-- Modify an existing user
-- Remove a user
+- Update an existing user
+- Delete a user
 - Return a paginated list of users with filtering options
 - Health check endpoint
 - In-memory data storage
@@ -81,7 +81,7 @@ Body:
 }
 ```
 
-2. **Modify an Existing User** :
+2. **Update an Existing User** :
 
 Endpoint: /users/{id}
 
@@ -117,7 +117,7 @@ Body
 }
 ```
 
-3. **Remove a User**
+3. **Delete a User**
 Endpoint: /users/{id}
 
 Method: DELETE
@@ -169,5 +169,20 @@ Body:
             "updated_at": "2023-09-01T12:35:56Z"
         }
     ]
+}
+```
+
+5. **Health Check**:
+Endpoint: /health
+
+Method: GET
+
+Response:
+Status Code: 200 OK
+Body:
+
+```json
+{
+    "status": "OK"
 }
 ```

@@ -16,7 +16,7 @@ func createRequest(t *testing.T, method, url string, body interface{}) *http.Req
 	t.Helper()
 	b, err := json.Marshal(body)
 	if err != nil {
-		t.Fatalf("Failed to marshal body: %v", err)
+		t.Fatalf("Failed to marshal body content: %v", err)
 	}
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(b))
 	if err != nil {

@@ -148,7 +148,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(updatedUser)
 }
 
-// DeleteUser handles deleting a user by ID.
+// DeleteUser handles deleting a user by User_ID.
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/users/")
 
