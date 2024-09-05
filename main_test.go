@@ -136,7 +136,7 @@ func TestUpdateUser(t *testing.T) {
 		LastName:  "Doe",
 		Nickname:  "jdoe",
 		Email:     "johndoe@example.com",
-		Country:   "US",
+		Country:   "India",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -150,7 +150,7 @@ func TestUpdateUser(t *testing.T) {
 		"last_name":  "Doe",
 		"nickname":   "jdoe",
 		"email":      "janedoe@example.com",
-		"country":    "US",
+		"country":    "India",
 	}
 
 	req := createRequest(t, http.MethodPut, "/users/"+testUser.ID, updatedData)
@@ -178,7 +178,7 @@ func TestDeleteUser(t *testing.T) {
 		ID:        "456",
 		FirstName: "Test",
 		LastName:  "User",
-		Country:   "Canada",
+		Country:   "Irland",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
