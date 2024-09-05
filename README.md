@@ -125,7 +125,13 @@ Method: DELETE
 
 Response:
 
-Status Code: 204 No Content
+Status Code: 200
+
+```json
+{
+    "message": "User deleted successfully"
+}
+```
 
 4. **Get a Paginated List of Users**
 Endpoint: /users
