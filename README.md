@@ -44,7 +44,8 @@ To run the application locally, follow these steps:
 
 2. **Run the Docker container**:
    ```sh
-   docker run -p 8080:8080 user-management-service
+   docker run --name my-user-service -p 8080:8080 user-management-service
+
 
 ### API Endpoints
 

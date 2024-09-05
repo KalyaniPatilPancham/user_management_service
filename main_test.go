@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // Helper function to create a new HTTP request with JSON body
@@ -16,7 +18,7 @@ func createRequest(t *testing.T, method, url string, body interface{}) *http.Req
 	t.Helper()
 	b, err := json.Marshal(body)
 	if err != nil {
-		t.Fatalf("Failed to marshal body content: %v", err)
+		t.Fatalf("Failed to marshal body: %v", err)
 	}
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(b))
 	if err != nil {
@@ -174,36 +176,42 @@ func TestUpdateUser(t *testing.T) {
 
 // Test deleting a user
 func TestDeleteUser(t *testing.T) {
-	testUser := User{
-		ID:        "456",
-		FirstName: "Test",
-		LastName:  "User",
-		Country:   "Irland",
+	user := User{
+		ID:        uuid.New().String(),
+		FirstName: "Alice",
+		LastName:  "Bob",
+		Nickname:  "AB123",
+		Password:  "supersecurepassword",
+		Email:     "alice@bob.com",
+		Country:   "UK",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
 
 	usersMu.Lock()
-	users[testUser.ID] = testUser
+	users[user.ID] = user
 	usersMu.Unlock()
 
-	req, err := http.NewRequest(http.MethodDelete, "/users/"+testUser.ID, nil)
+	req, err := http.NewRequest("DELETE", "/users/"+user.ID, nil)
 	if err != nil {
-		t.Fatalf("Failed to create request: %v", err)
+		t.Fatal(err)
 	}
+
 	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(DeleteUser)
+	handler.ServeHTTP(rr, req)
 
-	http.HandlerFunc(DeleteUser).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusNoContent {
-		t.Errorf("Expected status code %d, got %d", http.StatusNoContent, rr.Code)
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
 
-	usersMu.RLock()
-	_, exists := users[testUser.ID]
-	usersMu.RUnlock()
-	if exists {
-		t.Errorf("User should have been deleted, but still exists")
+	var resp map[string]string
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Errorf("could not unmarshal response body: %v", err)
+	}
+
+	if resp["message"] != "User deleted successfully" {
+		t.Errorf("handler returned unexpected body: got %v want %v", resp["message"], "User deleted successfully")
 	}
 }
 

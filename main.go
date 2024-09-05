@@ -149,20 +149,29 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // DeleteUser handles deleting a user by User_ID.
+// DeleteUser removes a user by ID from the in-memory store
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/users/")
+	log.Printf("Received request to delete user: %s", id)
 
 	usersMu.Lock()
 	_, exists := users[id]
+	if exists {
+		delete(users, id)
+	}
+	usersMu.Unlock()
+
 	if !exists {
-		usersMu.Unlock()
+		log.Printf("User not found: %s", id)
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
-	delete(users, id)
-	usersMu.Unlock()
 
-	w.WriteHeader(http.StatusNoContent)
+	log.Printf("User deleted successfully: %s", id)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	response := map[string]string{"message": "User deleted successfully"}
+	json.NewEncoder(w).Encode(response)
 }
 
 // HealthCheck handles a simple health check.
