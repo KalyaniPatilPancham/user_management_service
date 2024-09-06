@@ -25,7 +25,7 @@ To run the application locally, follow these steps:
 1. **Clone the repository**:
 
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/KalyaniPatilPancham/user_management_service
    cd user-management-service
 
 2. **Build the application**:
